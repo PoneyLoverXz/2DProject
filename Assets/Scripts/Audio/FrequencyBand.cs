@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FrequencyBand : MonoBehaviour
 {
-    public int _band;
+    public AudioPeer audioPeer;
     public float _startScale;
     public float _scaleMultiplier;
     public bool _useBuffer;
@@ -20,13 +20,13 @@ public class FrequencyBand : MonoBehaviour
     {
         if(_useBuffer)
         {
-            transform.localScale = new Vector3(transform.localScale.x, (AudioPeer._audioBandBuffer[_band] * _scaleMultiplier) + _startScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.audioBandBuffer * _scaleMultiplier) + _startScale, transform.localScale.z);
         }
         else
         {
-            transform.localScale = new Vector3(transform.localScale.x, (AudioPeer._audioBandBuffer[_band] * _scaleMultiplier) + _startScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.audioBandBuffer * _scaleMultiplier) + _startScale, transform.localScale.z);
         }
-        Color color = new Color(AudioPeer._audioBandBuffer[_band], AudioPeer._audioBandBuffer[_band], AudioPeer._audioBandBuffer[_band]);
+        Color color = new Color(audioPeer.audioBandBuffer, audioPeer.audioBandBuffer, audioPeer.audioBandBuffer);
         _material.SetColor("_EmissionColor", color);
     }
 }

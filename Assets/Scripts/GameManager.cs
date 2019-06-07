@@ -5,8 +5,8 @@ using UnityStandardAssets._2D;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject character;
-    public GameObject emetter;
+    public static GameObject character;
+    public static GameObject emetter;
 
     float time = 0f;
     float timer = .5f;
@@ -25,7 +25,12 @@ public class GameManager : MonoBehaviour
         {
             time = time - timer;
 
-            emetter.GetComponent<ProjectileEmetter>().Shoot(character.transform.position - emetter.transform.position);
+            //emetter.GetComponent<ProjectileEmetter>().Shoot(character.transform.position - emetter.transform.position);
         }
+    }
+
+    public static void Shoot()
+    {
+        emetter.GetComponent<ProjectileEmetter>().Shoot(character.transform.position - emetter.transform.position);
     }
 }
