@@ -8,22 +8,21 @@ public class AudioPeer : MonoBehaviour
 {
     private AudioSource _audioSource;
 
-    private const int AMOUNT_OF_BANDS = 6;
+    float[] samples = new float[512];
+    public float freqBand = 0;
 
-    public float[] samples = new float[512];
-    float _freqBand = 0;
     float _bandBuffer = 0;
     float _bufferDecrease = 0;
     float _freqBandHighest = 0;
 
-    public float audioBand = 0;
-    public  float audioBandBuffer = 0;
+    public float shootFrequency = 1;
+    public bool canShoot = true;
 
-    public float amplitude;
-    public float amplitudeBuffer;
-    float _amplitudeHighest;
+    public List<float> audioBands = new List<float>();
 
-    private void Start()
+    int frames = 0;
+
+    private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
     }
@@ -32,14 +31,11 @@ public class AudioPeer : MonoBehaviour
     {
         GetSpectrumAudioSource();
         MakeFrequencyBand();
-       // BandBuffer();
-        CreateAudioBand();
-        //GetAmplitude();
     }
 
     public void Play()
     {
-        _audioSource.Play();
+        _audioSource?.Play();
     }
 
     private void GetSpectrumAudioSource()
@@ -49,6 +45,8 @@ public class AudioPeer : MonoBehaviour
 
     void MakeFrequencyBand()
     {
+        var lastFreq = freqBand;
+
         var total = 0.0f;
         var count = samples.Length;
         for (int i = 0; i < count; ++i)
@@ -60,41 +58,27 @@ public class AudioPeer : MonoBehaviour
 
         var average = total / count;
 
-        _freqBand = average * 100;
-    }
+        freqBand = average * 1000;
 
-    private void CreateAudioBand()
-    {
-        if(_freqBand > _freqBandHighest)
+        if (freqBand < 0.2 || (freqBand/lastFreq) > 2)
         {
-            _freqBandHighest = _freqBand;
+            canShoot = true;
         }
-        audioBand = (_freqBand / _freqBandHighest);
-        //audioBandBuffer = (_bandBuffer / _freqBandHighest);
+
+        audioBands.Add(freqBand);
     }
 
     void BandBuffer()
     {
-        if (_freqBand > _bandBuffer)
+        if (freqBand > _bandBuffer)
         {
-            _bandBuffer = _freqBand;
+            _bandBuffer = freqBand;
             _bufferDecrease = 0.05f;
         }
-        else if (_freqBand < _bandBuffer)
+        else if (freqBand < _bandBuffer)
         {
             _bandBuffer -= _bufferDecrease;
             _bufferDecrease*= 1.2f;
         }
-    }
-
-    private void GetAmplitude()
-    {
-        if (audioBand > _amplitudeHighest)
-        {
-            _amplitudeHighest = audioBand;
-        }
-
-        amplitude = audioBand / _amplitudeHighest;
-        amplitudeBuffer = amplitude / _amplitudeHighest;
     }
 }

@@ -9,7 +9,6 @@ public class Projectile : MonoBehaviour
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        Debug.Log("rb is set");
     }
 
     private void Update()
@@ -20,6 +19,5 @@ public class Projectile : MonoBehaviour
     public void ShootInDirection(Vector2 direction)
     {
         _rb.AddForce(direction.normalized * ProjectileSpeed);
-        Debug.Log("Force");
     }
 }

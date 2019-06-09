@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BackgroundLight : MonoBehaviour
 {
-    AudioPeer audioPeer;
+    public AudioPeer audioPeer;
     public float _minIntensity, _maxIntensity;
-    Light _light;
+    private Light _light;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +16,6 @@ public class BackgroundLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _light.intensity = (audioPeer.audioBandBuffer * (_maxIntensity - _minIntensity)) + _minIntensity;
+        _light.intensity = (audioPeer.freqBand * (_maxIntensity - _minIntensity)) + _minIntensity;
     }
 }

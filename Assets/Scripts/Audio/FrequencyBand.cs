@@ -20,13 +20,13 @@ public class FrequencyBand : MonoBehaviour
     {
         if(_useBuffer)
         {
-            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.audioBandBuffer * _scaleMultiplier) + _startScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.freqBand * _scaleMultiplier) + _startScale, transform.localScale.z);
         }
         else
         {
-            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.audioBandBuffer * _scaleMultiplier) + _startScale, transform.localScale.z);
+            transform.localScale = new Vector3(transform.localScale.x, (audioPeer.freqBand * _scaleMultiplier) + _startScale, transform.localScale.z);
         }
-        Color color = new Color(audioPeer.audioBandBuffer, audioPeer.audioBandBuffer, audioPeer.audioBandBuffer);
+        Color color = new Color(audioPeer.freqBand, audioPeer.freqBand, audioPeer.freqBand);
         _material.SetColor("_EmissionColor", color);
     }
 }
