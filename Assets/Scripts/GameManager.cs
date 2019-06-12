@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets._2D;
-
 public class GameManager : MonoBehaviour
 {
     public static GameObject character;

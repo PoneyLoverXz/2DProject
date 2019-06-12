@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets._2D;
 
 public class ProjectileEmetter : MonoBehaviour
 {
