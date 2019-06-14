@@ -20,12 +20,11 @@ public class AudioManager : MonoBehaviour
     {
         for(int i = 0; i < audioList.Count; i++)
         {
-            var currentAudio= audioList[i];
+            var currentAudio = audioList[i];
             if(currentAudio.canShoot && currentAudio.freqBand > 0.5f)
             {
-                emetters[i].Shoot(new Vector2(1,0));
-                //currentAudio.shootFrequency = currentAudio.freqBand;
                 currentAudio.canShoot = false;
+                EventBus<AudioType>.ShootEventBus.Invoke(currentAudio.audioType);
             }
         }
     }

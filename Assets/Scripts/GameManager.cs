@@ -3,32 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 public class GameManager : MonoBehaviour
 {
-    public static GameObject character;
-    public static GameObject emetter;
+    public static GameManager instance;
 
-    float time = 0f;
-    float timer = .5f;
-    // Start is called before the first frame update
-    void Start()
+    public GameObject character;
+    public List<ProjectileEmetter> emetters;
+
+    void Awake()
     {
-        
+        MakeSingleton();
+        EventBus<AudioType>.ShootEventBus.Connect(Shoot);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        time += Time.deltaTime;
+        EventBus<AudioType>.ShootEventBus.Disconnect(Shoot);
+    }
 
-        if (time >= timer)
+    private void MakeSingleton()
+    {
+        if(instance != null)
         {
-            time = time - timer;
-
-            //emetter.GetComponent<ProjectileEmetter>().Shoot(character.transform.position - emetter.transform.position);
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
-    public static void Shoot()
+    public void Shoot(AudioType audioType)
     {
-        emetter.GetComponent<ProjectileEmetter>().Shoot(character.transform.position - emetter.transform.position);
+        foreach(var emetter in emetters)
+        {
+            if(audioType == emetter.audioType)
+                emetter.Shoot();
+        }
+    }
+
+    public Vector3 GetCharacterPosition()
+    {
+        return character.transform.position;
     }
 }

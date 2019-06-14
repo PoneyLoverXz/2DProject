@@ -9,18 +9,17 @@ public class AudioPeer : MonoBehaviour
     private AudioSource _audioSource;
 
     float[] samples = new float[512];
+    private float shootFrequency = 1;
+
+    [HideInInspector]
     public float freqBand = 0;
-
-    float _bandBuffer = 0;
-    float _bufferDecrease = 0;
-    float _freqBandHighest = 0;
-
-    public float shootFrequency = 1;
+    [HideInInspector]
     public bool canShoot = true;
 
-    public List<float> audioBands = new List<float>();
-
-    int frames = 0;
+    public AudioType audioType = AudioType.Other;
+    
+    //Used for testing
+    //public List<float> audioBands = new List<float>();
 
     private void Awake()
     {
@@ -65,9 +64,14 @@ public class AudioPeer : MonoBehaviour
             canShoot = true;
         }
 
-        audioBands.Add(freqBand);
+        //Used for testing
+        //audioBands.Add(freqBand);
     }
 
+    /*
+     * 
+    float _bandBuffer = 0;
+    float _bufferDecrease = 0;
     void BandBuffer()
     {
         if (freqBand > _bandBuffer)
@@ -81,4 +85,5 @@ public class AudioPeer : MonoBehaviour
             _bufferDecrease*= 1.2f;
         }
     }
+    */
 }
