@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
             if(currentAudio.canShoot && currentAudio.freqBand > 0.5f)
             {
                 currentAudio.canShoot = false;
-                EventBus<AudioType>.ShootEventBus.Invoke(currentAudio.audioType);
+                ProjectileEventBus.Shoot.Invoke(currentAudio.audioType);
             }
         }
     }

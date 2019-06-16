@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,36 +10,84 @@ public class CharacterMovement : MonoBehaviour {
 
     public float speed;
     public float jumpForce;
+    public float fallMultiplier = 2.5f;
+    public float lowJumpMultiplier = 2f;
 
-	// Use this for initialization
-	void Awake () {
+    private bool doubleJump;
+
+    // Use this for initialization
+    void Awake () {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collision>();
+        doubleJump = true;
     }
 
     // Update is called once per frame
     void Update () {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-        Vector2 dir = new Vector2(x, y);
-        Walk(dir);
+        UpdatePosition();
+        Move();
+        Fall();
+    }
 
-        if (Input.GetButtonDown("Jump"))
+    private void UpdatePosition()
+    {
+        if (coll.onGround)
         {
-           if (coll.onGround)
-                Jump(Vector2.up);
+            doubleJump = true;
         }
     }
 
+    private void Move()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        Walk(new Vector2(x, y));
+
+        var jump = Input.GetButtonDown("Jump");
+        if (jump)
+        {
+            if (coll.onGround)
+            {
+                Jump(Vector2.up);
+            }
+            else if (doubleJump)
+            {
+                Jump(Vector2.up, true);
+            }
+        }
+    }
+    
     private void Walk(Vector2 dir)
     {
         rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
     }
 
-    private void Jump(Vector2 dir)
+    private void Jump(Vector2 dir, bool isDoubleJump = false)
     {
+        Vector2 jumpVelocity;
+        if(!isDoubleJump)
+        {
+            jumpVelocity = dir * jumpForce;
+        }
+        else
+        {
+            jumpVelocity = dir * jumpForce * 0.8f;
+            doubleJump = false;
+        }
+
         rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.velocity += dir * jumpForce;
+        rb.velocity += dir * jumpVelocity;
     }
 
+    private void Fall()
+    {
+       if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
+        }
+    }
 }

@@ -11,12 +11,12 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         MakeSingleton();
-        EventBus<AudioType>.ShootEventBus.Connect(Shoot);
+        ProjectileEventBus.Shoot.Connect(Shoot);
     }
 
     private void OnDestroy()
     {
-        EventBus<AudioType>.ShootEventBus.Disconnect(Shoot);
+        ProjectileEventBus.Shoot.Disconnect(Shoot);
     }
 
     private void MakeSingleton()
