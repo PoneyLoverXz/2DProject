@@ -7,6 +7,8 @@ public class CharacterMovement : MonoBehaviour {
 
     private Rigidbody2D rb;
     private Collision coll;
+    [SerializeField]
+    private Animator animator;
 
     public float speed;
     public float jumpForce;
@@ -41,7 +43,17 @@ public class CharacterMovement : MonoBehaviour {
     {
         float x = Input.GetAxis("Horizontal");
         float y = Input.GetAxis("Vertical");
+        
         Walk(new Vector2(x, y));
+
+        if (x != 0)
+        {
+            animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false);
+        }
 
         var jump = Input.GetButtonDown("Jump");
         if (jump)
