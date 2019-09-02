@@ -6,7 +6,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour {
 
     private Rigidbody2D rb;
-    private Collision coll;
+    private CollisionDetection coll;
     [SerializeField]
     private Animator animator;
 
@@ -20,7 +20,7 @@ public class CharacterMovement : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         rb = GetComponent<Rigidbody2D>();
-        coll = GetComponent<Collision>();
+        coll = GetComponent<CollisionDetection>();
         doubleJump = true;
     }
 
@@ -49,6 +49,15 @@ public class CharacterMovement : MonoBehaviour {
         if (x != 0)
         {
             animator.SetBool("IsWalking", true);
+
+            if (x < 0)
+            {
+                gameObject.transform.localScale = new Vector3(-1,1,1);
+            }
+            else
+            {
+                gameObject.transform.localScale = Vector3.one;
+            }
         }
         else
         {

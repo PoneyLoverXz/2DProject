@@ -145,3 +145,13 @@ public class ProjectileEventBus : IEventBus
         Shoot.Clear();
     }
 }
+
+public class CharacterEventBus : IEventBus
+{
+    public static readonly EventBus<int> LoseHealth = new EventBus<int>();
+
+    public void Clear()
+    {
+        LoseHealth.Clear();
+    }
+}

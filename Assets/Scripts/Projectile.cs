@@ -5,7 +5,11 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private Rigidbody2D _rb;
+    public int damage;
     public float ProjectileSpeed = 0.5f;
+
+    public LayerMask groundLayer;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -26,4 +30,11 @@ public class Projectile : MonoBehaviour
     {
         _rb.AddForce(direction.normalized * ProjectileSpeed);
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (groundLayer == (groundLayer | (1 << other.gameObject.layer)))
+            Destroy(gameObject);
+    }
+
 }

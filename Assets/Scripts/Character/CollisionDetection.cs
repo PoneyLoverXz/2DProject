@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collision : MonoBehaviour
+public class CollisionDetection : MonoBehaviour
 {
 
     [Header("Layers")]
     public LayerMask groundLayer;
+    public LayerMask projectileLayer;
 
     [Space]
 
@@ -15,11 +16,11 @@ public class Collision : MonoBehaviour
     public bool onRightWall;
     public bool onLeftWall;
     public int wallSide;
+    public bool onProjectile;
 
     [Space]
 
     [Header("Collision")]
-
     public float collisionRadius = 0.25f;
     public Vector2 bottomOffset, rightOffset, leftOffset;
     private Color debugCollisionColor = Color.red;
@@ -34,6 +35,23 @@ public class Collision : MonoBehaviour
         onLeftWall = Physics2D.OverlapCircle((Vector2)transform.position + leftOffset, collisionRadius, groundLayer);
 
         wallSide = onRightWall ? -1 : 1;
+
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (projectileLayer == (projectileLayer | (1 << other.gameObject.layer)))
+        {
+            var projectile = other.GetComponent<Projectile>();
+
+            CharacterEventBus.LoseHealth.Invoke(projectile.damage);
+            Destroy(other.gameObject);
+        }
     }
 
     void OnDrawGizmos()

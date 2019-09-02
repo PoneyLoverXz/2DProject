@@ -17,22 +17,38 @@ public class ProjectileEmetter : MonoBehaviour
 
     public void Shoot()
     {
-        var projectileInstance = Instantiate(projectilePrefab, transform);
-        projectileInstance.transform.position = transform.position;
-        var projectile = projectileInstance.GetComponent<Projectile>();
-        projectile.ShootInDirection(GetDirection());
+        var directions = GetDirection();
+        foreach (var direction in directions)
+        {
+            var projectileInstance = Instantiate(projectilePrefab, transform);
+            projectileInstance.transform.position = transform.position;
+            var projectile = projectileInstance.GetComponent<Projectile>();
+            projectile.ShootInDirection(direction);
+        }
+            
     }
 
-    private Vector2 GetDirection()
+    private List<Vector2> GetDirection()
     {
         switch(emetterType)
         {
             case EmetterType.StraightLine:
-                return transform.right;
+                return new List<Vector2>() { transform.right };
             case EmetterType.TowardsCharacter:
-                return (gameManager.GetCharacterPosition() - transform.position);
-            //TODO: case EmetterType.Everywhere: 
+                return new List<Vector2>() { gameManager.GetCharacterPosition() - transform.position };
+            case EmetterType.Everywhere:
+                var directions = new List<Vector2>();
+                directions.Add(new Vector2(0, 1));
+                directions.Add(new Vector2(1, 0));
+                directions.Add(new Vector2(1, 1));
+                directions.Add(new Vector2(-1, 0));
+                directions.Add(new Vector2(0, -1));
+                directions.Add(new Vector2(-1, -1));
+                directions.Add(new Vector2(1, -1));
+                directions.Add(new Vector2(-1, 1));
+
+                return directions;
         }
-        return new Vector2(1, 0);
+        return new List<Vector2>() { transform.right };
     }
 }

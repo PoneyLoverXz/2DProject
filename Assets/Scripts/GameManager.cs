@@ -12,11 +12,13 @@ public class GameManager : MonoBehaviour
     {
         MakeSingleton();
         ProjectileEventBus.Shoot.Connect(Shoot);
+        CharacterEventBus.LoseHealth.Connect(LoseHealth);
     }
 
     private void OnDestroy()
     {
         ProjectileEventBus.Shoot.Disconnect(Shoot);
+        CharacterEventBus.LoseHealth.Connect(LoseHealth);
     }
 
     private void MakeSingleton()
@@ -44,5 +46,11 @@ public class GameManager : MonoBehaviour
     public Vector3 GetCharacterPosition()
     {
         return character.transform.position;
+    }
+    
+    public void LoseHealth(int damage)
+    {
+        var health = character.GetComponent<Health>();
+        health.LoseHealth(damage);
     }
 }
