@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 public class GameManager : MonoBehaviour
@@ -6,13 +7,15 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameObject character;
-    public List<ProjectileEmetter> emetters;
+    public GameObject emetterHolder;
+    private List<ProjectileEmetter> emetters;
 
     void Awake()
     {
         MakeSingleton();
         ProjectileEventBus.Shoot.Connect(Shoot);
         CharacterEventBus.LoseHealth.Connect(LoseHealth);
+        emetters = emetterHolder.GetComponentsInChildren<ProjectileEmetter>().ToList();
     }
 
     private void OnDestroy()

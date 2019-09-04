@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField]
+    private Animator animator;
     public List<Image> _hearts;
 
     public Sprite fullHeart;
@@ -12,9 +14,10 @@ public class Health : MonoBehaviour
 
     public int health;
     public bool canTakeDamage = true;
-    public int avoidSeconds;
+    public float avoidSeconds;
 
     public Vector3 StartPosition;
+
 
     private void Update()
     {
@@ -30,17 +33,24 @@ public class Health : MonoBehaviour
     {
         if(canTakeDamage)
         {
+            animator.SetTrigger("Hurt");
             health -= damage;
-            canTakeDamage = false;
+            SetCanTakeDamage(false);
             StartCoroutine(AvoidDamageFor(avoidSeconds));
         }
     }
 
-    private IEnumerator AvoidDamageFor(int seconds)
+    private IEnumerator AvoidDamageFor(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        canTakeDamage = true;
+        SetCanTakeDamage(true);
         yield break;
+    }
+
+    private void SetCanTakeDamage(bool takeDamage)
+    {
+        canTakeDamage = takeDamage;
+        animator.SetBool("CanBeDamaged", takeDamage);
     }
 
     private void UpdateUI()

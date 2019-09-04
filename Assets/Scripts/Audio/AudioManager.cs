@@ -1,21 +1,23 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public List<AudioPeer> audioList = new List<AudioPeer>();
-    public List<ProjectileEmetter> emetters = new List<ProjectileEmetter>();
-    // Start is called before the first frame update
-    void Start()
+    public GameObject audioHolder;
+    private List<AudioPeer> audioList = new List<AudioPeer>();
+
+    private void Awake()
     {
-        foreach(var audio in audioList)
-        {
-            audio.Play();
-        }
+       audioList = audioHolder.GetComponentsInChildren<AudioPeer>().ToList();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        StartCoroutine(PlayAudio());
+    }
+
     void Update()
     {
         for(int i = 0; i < audioList.Count; i++)
@@ -27,5 +29,17 @@ public class AudioManager : MonoBehaviour
                 ProjectileEventBus.Shoot.Invoke(currentAudio.audioType);
             }
         }
+    }
+
+    IEnumerator PlayAudio()
+    {
+        yield return new WaitForSeconds(2);
+
+        foreach (var audio in audioList)
+        {
+            audio.Play();
+        }
+
+        yield break;
     }
 }

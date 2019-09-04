@@ -5,6 +5,7 @@ using UnityEngine;
 public class ProjectileEmetter : MonoBehaviour
 {
     public GameObject projectilePrefab;
+    public Animator animator;
     public EmetterType emetterType = EmetterType.StraightLine;
     public AudioType audioType = AudioType.Lead;
 
@@ -20,12 +21,14 @@ public class ProjectileEmetter : MonoBehaviour
         var directions = GetDirection();
         foreach (var direction in directions)
         {
+            animator.SetBool("Pulse", false);
             var projectileInstance = Instantiate(projectilePrefab, transform);
             projectileInstance.transform.position = transform.position;
             var projectile = projectileInstance.GetComponent<Projectile>();
             projectile.ShootInDirection(direction);
+            animator.SetBool("Pulse", true);
         }
-            
+
     }
 
     private List<Vector2> GetDirection()
@@ -50,5 +53,10 @@ public class ProjectileEmetter : MonoBehaviour
                 return directions;
         }
         return new List<Vector2>() { transform.right };
+    }
+
+    private void OnAnimationEvent()
+    {
+        animator.SetBool("Pulse", false);
     }
 }
