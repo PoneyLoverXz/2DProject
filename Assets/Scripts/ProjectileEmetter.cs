@@ -11,7 +11,7 @@ public class ProjectileEmetter : MonoBehaviour
 
     private GameManager gameManager;
 
-    public void Awake()
+    public void Start()
     {
         gameManager = GameManager.instance;
     }
