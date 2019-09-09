@@ -49,7 +49,7 @@ public class CollisionDetection : MonoBehaviour
         {
             var projectile = other.GetComponent<Projectile>();
 
-            CharacterEventBus.LoseHealth.Invoke(projectile.damage);
+            GameManager.instance.LoseHealth(projectile.damage);
             Destroy(other.gameObject);
         }
     }

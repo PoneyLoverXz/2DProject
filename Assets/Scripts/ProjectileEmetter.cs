@@ -14,6 +14,7 @@ public class ProjectileEmetter : MonoBehaviour
     public void Start()
     {
         gameManager = GameManager.instance;
+        gameManager.AddEmetterToList(this);
     }
 
     public void Shoot()

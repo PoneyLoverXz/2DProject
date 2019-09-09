@@ -7,21 +7,28 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public GameObject character;
-    public GameObject emetterHolder;
-    private List<ProjectileEmetter> emetters;
+    private List<ProjectileEmetter> emetters = new List<ProjectileEmetter>();
 
     void Awake()
     {
         MakeSingleton();
         ProjectileEventBus.Shoot.Connect(Shoot);
-        CharacterEventBus.LoseHealth.Connect(LoseHealth);
-        emetters = emetterHolder.GetComponentsInChildren<ProjectileEmetter>().ToList();
     }
 
     private void OnDestroy()
     {
         ProjectileEventBus.Shoot.Disconnect(Shoot);
-        CharacterEventBus.LoseHealth.Connect(LoseHealth);
+    }
+
+    private void Start()
+    {
+        //TODO: remove when we have a main menu
+        InitGame();
+    }
+
+    private void OnLevelWasLoaded(int index)
+    {
+        InitGame();
     }
 
     private void MakeSingleton()
@@ -35,6 +42,17 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
+    }
+
+    private void InitGame()
+    {
+        //Open Loading Screen
+        emetters.Clear();
+        var audioManager = AudioManager.instance;
+        audioManager.ClearAudioList();
+        audioManager.PlayLevelMusic();
+        Time.timeScale = 1;
+        //Close Loading Screen
     }
 
     public void Shoot(AudioType audioType)
@@ -55,5 +73,15 @@ public class GameManager : MonoBehaviour
     {
         var health = character.GetComponent<Health>();
         health.LoseHealth(damage);
+    }
+
+    public void SetCharacter(GameObject gameObject)
+    {
+        character = gameObject;
+    }
+
+    public void AddEmetterToList(ProjectileEmetter emetter)
+    {
+        emetters.Add(emetter);
     }
 }

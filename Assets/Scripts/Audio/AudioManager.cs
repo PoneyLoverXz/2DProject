@@ -5,17 +5,21 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public GameObject audioHolder;
+    public static AudioManager instance;
+
     private List<AudioPeer> audioList = new List<AudioPeer>();
 
     private void Awake()
     {
-       audioList = audioHolder.GetComponentsInChildren<AudioPeer>().ToList();
-    }
-
-    void Start()
-    {
-        StartCoroutine(PlayAudio());
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     void Update()
@@ -31,6 +35,21 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void PlayLevelMusic()
+    {
+        StartCoroutine(PlayAudio());
+    }
+
+    public void AddAudioPeerToList(AudioPeer audioPeer)
+    {
+        audioList.Add(audioPeer);
+    }
+
+    public void ClearAudioList()
+    {
+        audioList.Clear();
+    }
+
     IEnumerator PlayAudio()
     {
         yield return new WaitForSeconds(2);
@@ -41,5 +60,13 @@ public class AudioManager : MonoBehaviour
         }
 
         yield break;
+    }
+
+    public void StopMusic()
+    {
+        foreach (var audio in audioList)
+        {
+            audio.Stop();
+        }
     }
 }
