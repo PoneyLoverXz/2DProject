@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject character;
+    public Character character;
     private List<ProjectileEmetter> emetters = new List<ProjectileEmetter>();
 
     void Awake()
@@ -26,7 +29,17 @@ public class GameManager : MonoBehaviour
         InitGame();
     }
 
-    private void OnLevelWasLoaded(int index)
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
+    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         InitGame();
     }
@@ -48,9 +61,8 @@ public class GameManager : MonoBehaviour
     {
         //Open Loading Screen
         emetters.Clear();
-        var audioManager = AudioManager.instance;
-        audioManager.ClearAudioList();
-        audioManager.PlayLevelMusic();
+        AudioManager.instance.InitGame();
+        UIManager.instance.InitGame();
         Time.timeScale = 1;
         //Close Loading Screen
     }
@@ -71,17 +83,30 @@ public class GameManager : MonoBehaviour
     
     public void LoseHealth(int damage)
     {
-        var health = character.GetComponent<Health>();
-        health.LoseHealth(damage);
+        character.LoseHealth(damage);
     }
 
-    public void SetCharacter(GameObject gameObject)
+    public void SetCharacter(Character character)
     {
-        character = gameObject;
+        this.character = character;
     }
 
     public void AddEmetterToList(ProjectileEmetter emetter)
     {
         emetters.Add(emetter);
+    }
+
+    public void Win()
+    {
+        Time.timeScale = 0;
+        AudioManager.instance.StopMusic();
+        UIManager.instance.ShowWin();
+    }
+
+    public void GameOver()
+    {
+        Time.timeScale = 0;
+        AudioManager.instance.StopMusic();
+        UIManager.instance.ShowGameOver();
     }
 }

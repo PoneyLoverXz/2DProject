@@ -35,7 +35,13 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayLevelMusic()
+    public void InitGame()
+    {
+        ClearAudioList();
+        PlayLevelMusic();
+    }
+
+    private void PlayLevelMusic()
     {
         StartCoroutine(PlayAudio());
     }
@@ -45,12 +51,12 @@ public class AudioManager : MonoBehaviour
         audioList.Add(audioPeer);
     }
 
-    public void ClearAudioList()
+    private void ClearAudioList()
     {
         audioList.Clear();
     }
 
-    IEnumerator PlayAudio()
+    private IEnumerator PlayAudio()
     {
         yield return new WaitForSeconds(2);
 
