@@ -6,9 +6,7 @@ using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private CollisionDetection coll;
-
+    [Header("General")]
     public Camera camera;
     public Animator animator;
 
@@ -16,9 +14,11 @@ public class Character : MonoBehaviour
     public List<Image> _hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
-    public int health;
+    public int health = 10;
     public bool canTakeDamage = true;
     public float avoidSeconds;
+
+    private bool dead = false;
 
     [Header("Movement")]
     public float speed;
@@ -27,18 +27,26 @@ public class Character : MonoBehaviour
     public float lowJumpMultiplier = 2f;
 
     private GameManager gameManager;
+    private Rigidbody2D rb;
+    private CollisionDetection coll;
+    private CameraFollow cameraFollow;
+
     private bool doubleJump;
+
 
     void Start()
     {
         gameManager = GameManager.instance;
         gameManager.SetCharacter(this);
+        health = 10;
+        rb.gravityScale = 1;
     }
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<CollisionDetection>();
+        cameraFollow = camera.gameObject.GetComponent<CameraFollow>();
         doubleJump = true;
     }
 
@@ -87,39 +95,42 @@ public class Character : MonoBehaviour
 
     private void Move()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-
-        Walk(new Vector2(x, y));
-
-        if (x != 0)
+        if(!dead)
         {
-            animator.SetBool("IsWalking", true);
+            float x = Input.GetAxis("Horizontal");
+            float y = Input.GetAxis("Vertical");
 
-            if (x < 0)
+            Walk(new Vector2(x, y));
+
+            if (x != 0)
             {
-                gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                animator.SetBool("IsWalking", true);
+
+                if (x < 0)
+                {
+                    gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                }
+                else
+                {
+                    gameObject.transform.localScale = Vector3.one;
+                }
             }
             else
             {
-                gameObject.transform.localScale = Vector3.one;
+                animator.SetBool("IsWalking", false);
             }
-        }
-        else
-        {
-            animator.SetBool("IsWalking", false);
-        }
 
-        var jump = Input.GetButtonDown("Jump");
-        if (jump)
-        {
-            if (coll.onGround)
+            var jump = Input.GetButtonDown("Jump");
+            if (jump)
             {
-                Jump(Vector2.up);
-            }
-            else if (doubleJump)
-            {
-                Jump(Vector2.up, true);
+                if (coll.onGround)
+                {
+                    Jump(Vector2.up);
+                }
+                else if (doubleJump)
+                {
+                    Jump(Vector2.up, true);
+                }
             }
         }
     }
@@ -162,9 +173,10 @@ public class Character : MonoBehaviour
     {
         UpdateUI();
 
-        if (health <= 0)
+        if (health <= 0 && !dead)
         {
-            gameManager.GameOver();
+            dead = true;
+            PlayDeathAnimation();
         }
     }
 
@@ -201,5 +213,14 @@ public class Character : MonoBehaviour
             else
                 _hearts[i].sprite = emptyHeart;
         }
+    }
+
+    public void PlayDeathAnimation()
+    {
+        UIManager.instance.ShowAlphaGray();
+        rb.gravityScale = 0;
+        rb.velocity = new Vector3(0, 0);
+        cameraFollow.SetFollow(false); 
+        animator.SetBool("Dead", true);
     }
 }

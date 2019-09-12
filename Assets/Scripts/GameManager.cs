@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public Character character;
+    //TODO: implement pause menu or pause when character dying + animation
+    public bool gamePaused = false;
     private List<ProjectileEmetter> emetters = new List<ProjectileEmetter>();
 
     void Awake()
@@ -107,6 +109,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
         AudioManager.instance.StopMusic();
+        UIManager.instance.alphaGray.gameObject.SetActive(false);
         UIManager.instance.ShowGameOver();
     }
 }

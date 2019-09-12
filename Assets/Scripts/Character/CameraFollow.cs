@@ -12,6 +12,8 @@ public class CameraFollow : MonoBehaviour
 
     private Vector3 velocity = Vector3.zero;
 
+    private bool follow = true;
+
     void LateUpdate()
     {
         if (!Application.isPlaying)
@@ -19,12 +21,20 @@ public class CameraFollow : MonoBehaviour
             transform.localPosition = offset;
         }
 
-        FollowTarget(target);
+        if(follow)
+        {
+            FollowTarget(target);
+        }
     }
 
     private void FollowTarget(Transform target)
     {
         Vector3 desiredPosition = target.position + offset;
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothSpeed);
+    }
+
+    public void SetFollow(bool active)
+    {
+        follow = active;
     }
 }

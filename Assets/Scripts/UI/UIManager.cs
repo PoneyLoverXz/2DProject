@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class UIManager : MonoBehaviour
     public WinPanel winPanel;
 
     public GameOverPanel gameOverPanel;
+
+    public Image alphaGray;
 
     // Start is called before the first frame update
     void Awake()
@@ -43,5 +46,10 @@ public class UIManager : MonoBehaviour
     public void ShowGameOver()
     {
         gameOverPanel.gameObject.SetActive(true);
+    }
+
+    public void ShowAlphaGray()
+    {
+        alphaGray.gameObject.SetActive(true);
     }
 }

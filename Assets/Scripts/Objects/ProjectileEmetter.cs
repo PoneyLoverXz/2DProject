@@ -60,4 +60,13 @@ public class ProjectileEmetter : MonoBehaviour
     {
         animator.SetBool("Pulse", false);
     }
+
+    private void OnDrawGizmos()
+    {
+        if(emetterType == EmetterType.StraightLine)
+        {
+            Vector3 to = transform.position + transform.right;
+            Gizmos.DrawLine(transform.position, to);
+        }
+    }
 }
