@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
     {
         winPanel.gameObject.SetActive(false);
         gameOverPanel.gameObject.SetActive(false);
+        alphaGray.gameObject.SetActive(false);
     }
 
     public void ShowWin()
