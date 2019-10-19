@@ -37,7 +37,6 @@ public class AudioManager : MonoBehaviour
 
     public void InitGame()
     {
-        ClearAudioList();
         PlayLevelMusic();
     }
 

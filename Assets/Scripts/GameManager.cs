@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     private void InitGame()
     {
         //Open Loading Screen
-        emetters.Clear();
         AudioManager.instance.InitGame();
         UIManager.instance.InitGame();
         Time.timeScale = 1;
