@@ -21,10 +21,10 @@ public class AudioPeer : MonoBehaviour
     //Used for testing
     //public List<float> audioBands = new List<float>();
 
-    private void Start()
+    private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        AudioManager.instance.AddAudioPeerToList(this);
+        //AudioManager.instance.AddAudioPeerToList(this);
     }
 
     private void Update()

@@ -37,7 +37,6 @@ public class Character : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
-        gameManager.SetCharacter(this);
         health = 10;
         rb.gravityScale = 1;
     }

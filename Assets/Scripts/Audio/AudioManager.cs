@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
-    private List<AudioPeer> audioList = new List<AudioPeer>();
+    public List<AudioPeer> audioList = new List<AudioPeer>();
 
     private void Awake()
     {
@@ -18,7 +18,6 @@ public class AudioManager : MonoBehaviour
         else
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -43,11 +42,6 @@ public class AudioManager : MonoBehaviour
     private void PlayLevelMusic()
     {
         StartCoroutine(PlayAudio());
-    }
-
-    public void AddAudioPeerToList(AudioPeer audioPeer)
-    {
-        audioList.Add(audioPeer);
     }
 
     private void ClearAudioList()

@@ -9,12 +9,11 @@ public class ProjectileEmetter : MonoBehaviour
     public EmetterType emetterType = EmetterType.StraightLine;
     public AudioType audioType = AudioType.Lead;
 
-    private GameManager gameManager;
+    private EmetterManager emetterManager;
 
     public void Start()
     {
-        gameManager = GameManager.instance;
-        gameManager.AddEmetterToList(this);
+        emetterManager = EmetterManager.instance;
     }
 
     public void Shoot()
@@ -39,7 +38,7 @@ public class ProjectileEmetter : MonoBehaviour
             case EmetterType.StraightLine:
                 return new List<Vector2>() { transform.right };
             case EmetterType.TowardsCharacter:
-                return new List<Vector2>() { gameManager.GetCharacterPosition() - transform.position };
+                return new List<Vector2>() { emetterManager.GetCharacterPosition() - transform.position };
             case EmetterType.Everywhere:
                 var directions = new List<Vector2>();
                 directions.Add(new Vector2(0, 1));
