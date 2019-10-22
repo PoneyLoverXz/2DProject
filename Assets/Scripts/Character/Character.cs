@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -11,10 +10,8 @@ public class Character : MonoBehaviour
     public Animator animator;
 
     [Header("Health")]
-    public List<Image> _hearts;
-    public Sprite fullHeart;
-    public Sprite emptyHeart;
-    public int health = 10;
+    public int currentHealth = 10;
+    public int maxHealth = 10;
     public bool canTakeDamage = true;
     public float avoidSeconds;
 
@@ -27,6 +24,7 @@ public class Character : MonoBehaviour
     public float lowJumpMultiplier = 2f;
 
     private GameManager gameManager;
+    private HUDManager hudManager;
     private Rigidbody2D rb;
     private CollisionDetection coll;
     private CameraFollow cameraFollow;
@@ -37,7 +35,9 @@ public class Character : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.instance;
-        health = 10;
+        hudManager = HUDManager.instance;
+        hudManager.UpdateHealth(maxHealth);
+        currentHealth = maxHealth;
         rb.gravityScale = 1;
     }
 
@@ -65,7 +65,7 @@ public class Character : MonoBehaviour
         var viewPos = camera.WorldToViewportPoint(transform.position);
         if(viewPos.y < 0)
         {
-            LoseHealth(health);
+            LoseHealth(currentHealth);
         }
         if (viewPos.x > 1)
         {
@@ -170,9 +170,9 @@ public class Character : MonoBehaviour
 
     private void UpdateHealth()
     {
-        UpdateUI();
+        hudManager.UpdateHealth(currentHealth);
 
-        if (health <= 0 && !dead)
+        if (currentHealth <= 0 && !dead)
         {
             dead = true;
             PlayDeathAnimation();
@@ -184,7 +184,7 @@ public class Character : MonoBehaviour
         if (canTakeDamage)
         {
             animator.SetTrigger("Hurt");
-            health -= damage;
+            currentHealth -= damage;
             SetCanTakeDamage(false);
             StartCoroutine(AvoidDamageFor(avoidSeconds));
         }
@@ -201,17 +201,6 @@ public class Character : MonoBehaviour
     {
         canTakeDamage = takeDamage;
         animator.SetBool("CanBeDamaged", takeDamage);
-    }
-
-    private void UpdateUI()
-    {
-        for (int i = 0; i < _hearts.Count; i++)
-        {
-            if (i < health)
-                _hearts[i].sprite = fullHeart;
-            else
-                _hearts[i].sprite = emptyHeart;
-        }
     }
 
     public void PlayDeathAnimation()
