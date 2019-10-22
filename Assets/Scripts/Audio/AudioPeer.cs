@@ -24,7 +24,6 @@ public class AudioPeer : MonoBehaviour
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-        //AudioManager.instance.AddAudioPeerToList(this);
     }
 
     private void Update()
