@@ -9,7 +9,6 @@ public class AudioPeer : MonoBehaviour
     private AudioSource _audioSource;
 
     float[] samples = new float[512];
-    private float shootFrequency = 1;
 
     [HideInInspector]
     public float freqBand = 0;

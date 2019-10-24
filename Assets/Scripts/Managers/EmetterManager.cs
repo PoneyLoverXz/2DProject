@@ -38,8 +38,8 @@ public class EmetterManager : MonoBehaviour
     {
         foreach (var emetter in emetters)
         {
-            if (audioType == emetter.audioType)
-                emetter.Shoot();
+           // if (audioType == emetter.audioType)
+                //emetter.Shoot();
         }
     }
 

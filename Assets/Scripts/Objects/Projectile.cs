@@ -6,7 +6,6 @@ public class Projectile : MonoBehaviour
 {
     private Rigidbody2D _rb;
     public int damage;
-    public float ProjectileSpeed = 0.5f;
 
     public LayerMask groundLayer;
 
@@ -26,9 +25,9 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void ShootInDirection(Vector2 direction)
+    public void ShootInDirection(Vector2 direction, float speed)
     {
-        _rb.AddForce(direction.normalized * ProjectileSpeed);
+        _rb.AddForce(direction.normalized * speed * 500);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

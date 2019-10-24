@@ -6,7 +6,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     [Header("General")]
-    public Camera camera;
+    public Camera cam;
     public Animator animator;
 
     [Header("Health")]
@@ -45,7 +45,7 @@ public class Character : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<CollisionDetection>();
-        cameraFollow = camera.gameObject.GetComponent<CameraFollow>();
+        cameraFollow = cam.gameObject.GetComponent<CameraFollow>();
         doubleJump = true;
     }
 
@@ -62,18 +62,18 @@ public class Character : MonoBehaviour
 
     private void AdjustCharacterPosition()
     {
-        var viewPos = camera.WorldToViewportPoint(transform.position);
+        var viewPos = cam.WorldToViewportPoint(transform.position);
         if(viewPos.y < 0)
         {
             LoseHealth(currentHealth);
         }
         if (viewPos.x > 1)
         {
-            transform.position = camera.ViewportToWorldPoint(new Vector3(1, viewPos.y, viewPos.z));
+            transform.position = cam.ViewportToWorldPoint(new Vector3(1, viewPos.y, viewPos.z));
         }
         else if (viewPos.x < 0)
         {
-            transform.position = camera.ViewportToWorldPoint(new Vector3(0, viewPos.y, viewPos.z));
+            transform.position = cam.ViewportToWorldPoint(new Vector3(0, viewPos.y, viewPos.z));
         }
     }
 

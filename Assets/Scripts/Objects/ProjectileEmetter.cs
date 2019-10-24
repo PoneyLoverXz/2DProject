@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ProjectileEmetter : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class ProjectileEmetter : MonoBehaviour
     public Animator animator;
     public EmetterType emetterType = EmetterType.StraightLine;
     public AudioType audioType = AudioType.Lead;
+    public float speed = 0.5f;
 
     private EmetterManager emetterManager;
 
@@ -25,7 +27,7 @@ public class ProjectileEmetter : MonoBehaviour
             var projectileInstance = Instantiate(projectilePrefab, transform);
             projectileInstance.transform.position = transform.position;
             var projectile = projectileInstance.GetComponent<Projectile>();
-            projectile.ShootInDirection(direction);
+            projectile.ShootInDirection(direction, speed);
             animator.SetBool("Pulse", true);
         }
 

@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
     public List<AudioPeer> audioList = new List<AudioPeer>();
+    public PlayableDirector timeline;
 
     private void Awake()
     {
@@ -57,6 +59,8 @@ public class AudioManager : MonoBehaviour
         {
             audio.Play();
         }
+
+        timeline.Play();
 
         yield break;
     }
