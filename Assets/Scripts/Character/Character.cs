@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
     public float jumpForce;
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
+    public float minimumYVelocity = -15f;
 
     private GameManager gameManager;
     private HUDManager hudManager;
@@ -30,6 +31,9 @@ public class Character : MonoBehaviour
     private CameraFollow cameraFollow;
 
     private bool doubleJump;
+
+    //FOR DEBUGGING PURPOSES
+    public Vector2 velo;
 
 
     void Start()
@@ -53,6 +57,7 @@ public class Character : MonoBehaviour
     {
         Movement();
         UpdateHealth();
+        velo = rb.velocity;
     }
 
     private void LateUpdate()
@@ -81,7 +86,6 @@ public class Character : MonoBehaviour
     {
         CheckIfDoubleJump();
         Move();
-        Fall();
     }
 
     private void CheckIfDoubleJump()
@@ -105,6 +109,7 @@ public class Character : MonoBehaviour
             {
                 animator.SetBool("IsWalking", true);
 
+                // Flip Character Sprite
                 if (x < 0)
                 {
                     gameObject.transform.localScale = new Vector3(-1, 1, 1);
@@ -136,7 +141,14 @@ public class Character : MonoBehaviour
 
     private void Walk(Vector2 dir)
     {
-        rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
+
+        if (coll.onLeftWall && dir.x < 0 ||
+           coll.onRightWall && dir.x > 0)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        else
+            rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
+
+        Fall(dir.y);
     }
 
     private void Jump(Vector2 dir, bool isDoubleJump = false)
@@ -156,16 +168,23 @@ public class Character : MonoBehaviour
         rb.velocity += dir * jumpVelocity;
     }
 
-    private void Fall()
+    private void Fall(float y)
     {
-        if (rb.velocity.y < 0)
+        if (y < 0 && !coll.onGround && rb.velocity.y <= 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            rb.velocity = new Vector2(rb.velocity.x, minimumYVelocity);
+        }
+        if (rb.velocity.y < 0 && rb.velocity.y > minimumYVelocity)
+        {
+            float yVelocity = rb.velocity.y + Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+            rb.velocity = new Vector2(rb.velocity.x, Math.Max(minimumYVelocity, yVelocity)); 
         }
         else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+
+       
     }
 
     private void UpdateHealth()
