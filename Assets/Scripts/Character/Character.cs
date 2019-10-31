@@ -136,19 +136,13 @@ public class Character : MonoBehaviour
                     Jump(Vector2.up, true);
                 }
             }
+            Fall(y);
         }
     }
 
     private void Walk(Vector2 dir)
     {
-
-        if (coll.onLeftWall && dir.x < 0 ||
-           coll.onRightWall && dir.x > 0)
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        else
-            rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
-
-        Fall(dir.y);
+        rb.velocity = new Vector2(dir.x * speed, rb.velocity.y);
     }
 
     private void Jump(Vector2 dir, bool isDoubleJump = false)
@@ -165,7 +159,7 @@ public class Character : MonoBehaviour
         }
 
         rb.velocity = new Vector2(rb.velocity.x, 0);
-        rb.velocity += dir * jumpVelocity;
+        rb.velocity += jumpVelocity;
     }
 
     private void Fall(float y)
@@ -183,8 +177,6 @@ public class Character : MonoBehaviour
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
-
-       
     }
 
     private void UpdateHealth()
