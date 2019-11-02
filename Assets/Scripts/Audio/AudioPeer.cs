@@ -18,7 +18,7 @@ public class AudioPeer : MonoBehaviour
     public AudioType audioType = AudioType.NoEmetter;
     
     //Used for testing
-    //public List<float> audioBands = new List<float>();
+    public List<float> audioBands = new List<float>();
 
     private void Awake()
     {
@@ -69,7 +69,7 @@ public class AudioPeer : MonoBehaviour
         }
 
         //Used for testing
-        //audioBands.Add(freqBand);
+        audioBands.Add(freqBand);
     }
 
     /*
