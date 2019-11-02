@@ -15,7 +15,7 @@ public class AudioPeer : MonoBehaviour
     [HideInInspector]
     public bool canShoot = true;
 
-    public AudioType audioType = AudioType.Other;
+    public AudioType audioType = AudioType.NoEmetter;
     
     //Used for testing
     //public List<float> audioBands = new List<float>();

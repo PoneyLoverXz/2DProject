@@ -11,5 +11,11 @@ public enum AudioType
     Kick,
     OpenHiHat,
     ClosedHiHat,
-    Other
+    HiHats,
+    Snares,
+    Cymbals,
+    Voice,
+    Loop,
+    Manual,
+    NoEmetter
 }
